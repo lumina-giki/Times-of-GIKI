@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times of GIKI - You're Invited!</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: #f9fafb;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .invitation-note {
+            background: #faf5ff;
+            border: 1px solid #7c3aed;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #5b21b6;
+        }
+
+        .inviter-info {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Times Of GIKI</div>
+            <div class="subtitle">A vibrant look at GIKI through images & stories</div>
+        </div>
+
+        <div class="content">
+            <h1 class="title">You're Invited to Times of GIKI</h1>
+            <div class="inviter-info">
+                <strong>{{ .InviterName }}</strong> has invited you to our community at Times of GIKI
+            </div>
+            <p class="message">
+                We're excited to welcome you to Times of GIKI - the premier platform for sharing and discovering
+                the vibrant life at Ghulam Ishaq Khan Institute. Connect with the GIKI community of students,
+                alumni, and faculty who share stories and experiences.
+            </p> <a href="{{ .ConfirmationURL }}" class="button">
+                Accept Invitation
+            </a>
+            <div class="invitation-note">
+                <strong>Invitation Benefits:</strong><br>
+                ✨ Access to all platform features<br>
+                📚 Content sharing with your inviter<br>
+                🎁 Welcome features<br>
+                🤝 Connect with {{ .InviterName }}
+            </div>
+        </div>
+        <div class="footer">
+            <p class="footer-text">
+                You received this invitation from {{ .InviterName }} for Times of GIKI.<br>
+                If you don't want to accept this invitation, you can safely ignore this email.<br><br>
+                <strong>Times of GIKI Team</strong><br>
+                Ghulam Ishaq Khan Institute of Engineering Sciences and Technology
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+{
+    "extends": "next/core-web-vitals",
+    "ignorePatterns": [
+        "src/app/page_broken.tsx",
+        "src/app/page_fixed.tsx",
+        "src/app/page_new.tsx"
+    ],
+    "rules": {
+        "react/no-unescaped-entities": "warn",
+        "@next/next/no-page-custom-font": "warn"
+    }
+}
