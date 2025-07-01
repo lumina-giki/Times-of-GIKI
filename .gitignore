@@ -47,3 +47,30 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Security and Development Files - Do not commit
+debug-supabase.js
+test-supabase.js
+backup-data-export.sql
+
+# Development Documentation - Keep only README.md in repo
+ADD_CREDIT_COLUMN_FIX.sql
+ARTICLE_NAVIGATION_FIXES.md
+ARTICLE_UPLOAD_FIX.md
+AUDIO_TEST.md
+CMS_SETUP_GUIDE.md
+CREDIT_FIELD_IMPLEMENTATION.md
+DEPLOYMENT_FIX.md
+FIXES_COMPLETED.md
+GOOGLE_AUTH_SETUP.md
+how-to-add-welcome-article.md
+IMAGE_ARTICLE_FIXES.md
+NEW_FEATURES_COMPLETED.md
+PERFORMANCE_OPTIMIZATION.md
+welcome-article-template.md
+SECURITY_AUDIT_RESULTS.md
+SUPABASE_STORAGE_SETUP.md
+
+# Database files (should be managed separately)
+database/*.sql
+!database/setup.sql

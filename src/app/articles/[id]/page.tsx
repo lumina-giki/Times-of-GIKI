@@ -7,6 +7,8 @@ import Navigation from '../../components/Navigation';
 import ModernBackground from '../../components/ModernBackground';
 import Link from 'next/link';
 import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Memoized components for better performance
 const MemoizedNavigation = memo(Navigation);
@@ -21,6 +23,100 @@ interface RelatedArticle {
     author: string;
     created_at: string;
 }
+
+// Utility functions for formatting
+const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+};
+
+// Custom components for ReactMarkdown
+const MarkdownComponents = {
+    h1: ({ children }: any) => (
+        <h1 className="text-4xl font-bold text-white mt-12 mb-8 leading-tight text-left ml-8">
+            {children}
+        </h1>
+    ),
+    h2: ({ children }: any) => (
+        <h2 className="text-3xl font-bold text-white mt-10 mb-6 leading-tight text-left ml-8">
+            {children}
+        </h2>
+    ),
+    h3: ({ children }: any) => (
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4 leading-tight text-left ml-8">
+            {children}
+        </h3>
+    ),
+    p: ({ children }: any) => (
+        <p className="text-white/90 leading-relaxed mb-6 text-left ml-8 mr-8">
+            {children}
+        </p>
+    ),
+    img: ({ src, alt }: any) => (
+        <div className="my-8 flex justify-center">
+            <img
+                src={src}
+                alt={alt || "Article content"}
+                className="max-w-full h-auto rounded-lg shadow-lg border border-white/10"
+                style={{ maxHeight: '500px' }}
+            />
+        </div>
+    ),
+    strong: ({ children }: any) => (
+        <strong className="font-bold text-white">{children}</strong>
+    ),
+    em: ({ children }: any) => (
+        <em className="italic text-white/95">{children}</em>
+    ),
+    ul: ({ children }: any) => (
+        <ul className="list-disc list-inside text-white/90 ml-8 mr-8 mb-6 space-y-2">
+            {children}
+        </ul>
+    ),
+    ol: ({ children }: any) => (
+        <ol className="list-decimal list-inside text-white/90 ml-8 mr-8 mb-6 space-y-2">
+            {children}
+        </ol>
+    ),
+    li: ({ children }: any) => (
+        <li className="leading-relaxed">{children}</li>
+    ),
+    blockquote: ({ children }: any) => (
+        <blockquote className="border-l-4 border-blue-400 pl-4 ml-8 mr-8 my-6 text-white/90 italic">
+            {children}
+        </blockquote>
+    ),
+    code: ({ children, className }: any) => {
+        const isInline = !className;
+        if (isInline) {
+            return (
+                <code className="bg-black/30 text-blue-300 px-2 py-1 rounded text-sm font-mono">
+                    {children}
+                </code>
+            );
+        } else {
+            return (
+                <pre className="bg-black/40 text-green-300 p-4 rounded-lg ml-8 mr-8 my-6 overflow-x-auto">
+                    <code className="font-mono text-sm">{children}</code>
+                </pre>
+            );
+        }
+    },
+    a: ({ href, children }: any) => (
+        <a
+            href={href}
+            className="text-blue-400 hover:text-blue-300 underline transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            {children}
+        </a>
+    ),
+};
 
 export default function ArticlePage() {
     const params = useParams();
@@ -223,7 +319,12 @@ export default function ArticlePage() {
 
                             {/* Article Content */}
                             <div className="prose prose-lg max-w-none">
-                                {formatContent(article.content)}
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    components={MarkdownComponents}
+                                >
+                                    {article.content}
+                                </ReactMarkdown>
                             </div>
 
                             {/* Article Footer */}

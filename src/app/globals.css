@@ -137,6 +137,101 @@ body {
   line-height: 1.7;
 }
 
+/* Article Content Styles */
+.prose-custom {
+  max-width: none;
+  padding: 0 2rem;
+}
+
+.prose-custom p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  text-align: left;
+}
+
+.prose-custom h1 {
+  font-size: 2.5rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  color: white;
+  font-weight: 700;
+}
+
+.prose-custom h2 {
+  font-size: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: white;
+  font-weight: 600;
+}
+
+.prose-custom h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.prose-custom img {
+  margin: 2rem auto;
+  display: block;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-custom strong {
+  color: white;
+  font-weight: 600;
+}
+
+.prose-custom em {
+  color: rgba(255, 255, 255, 0.95);
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .prose-custom {
+    padding: 0 1rem;
+  }
+
+  .prose-custom p,
+  .prose-custom h1,
+  .prose-custom h2,
+  .prose-custom h3 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .prose-custom h1 {
+    font-size: 2rem;
+  }
+
+  .prose-custom h2 {
+    font-size: 1.75rem;
+  }
+
+  .prose-custom h3 {
+    font-size: 1.25rem;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
