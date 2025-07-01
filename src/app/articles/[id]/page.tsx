@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkUnwrapImages from 'remark-unwrap-images';
 
 // Memoized components for better performance
 const MemoizedNavigation = memo(Navigation);
@@ -57,7 +58,7 @@ const MarkdownComponents = {
         </p>
     ),
     img: ({ src, alt }: any) => (
-        <div className="my-8 flex justify-center">
+        <div className="my-8 flex justify-center w-full">
             <img
                 src={src}
                 alt={alt || "Article content"}
@@ -320,7 +321,7 @@ export default function ArticlePage() {
                             {/* Article Content */}
                             <div className="prose prose-lg max-w-none">
                                 <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
+                                    remarkPlugins={[remarkGfm, remarkUnwrapImages]}
                                     components={MarkdownComponents}
                                 >
                                     {article.content}
