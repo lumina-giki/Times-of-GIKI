@@ -25,7 +25,7 @@ function ImageUploader({ userProfile }: ImageUploaderProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Stable ref to avoid useEffect dependency issues
-    const refreshImagesRef = useRef<() => Promise<void>>(null as any);
+    const refreshImagesRef = useRef<(() => Promise<void>) | null>(null);
     const initializingRef = useRef(false);
 
     // Form state
@@ -80,7 +80,7 @@ function ImageUploader({ userProfile }: ImageUploaderProps) {
             console.error('Error refreshing images:', error);
             throw error;
         }
-    }, [userProfile?.id, userProfile?.role]);
+    }, [userProfile?.id, userProfile?.role, getDatabaseImages]);
 
     // Update the ref whenever refreshImages changes
     useEffect(() => {
@@ -398,59 +398,6 @@ function ImageUploader({ userProfile }: ImageUploaderProps) {
         } catch (error) {
             console.error('Database connection test failed:', error);
             return { error };
-        }
-    };
-
-    // Comprehensive connection verification
-    const verifyConnection = async (): Promise<boolean> => {
-        try {
-            console.log('Verifying full connection...');
-
-            // Step 1: Check session
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            if (sessionError) {
-                console.error('Session error:', sessionError);
-                return false;
-            }
-
-            if (!session) {
-                console.error('No active session');
-                return false;
-            }
-
-            // Step 2: Check user
-            const { data: { user }, error: userError } = await supabase.auth.getUser();
-            if (userError || !user) {
-                console.error('User verification failed:', userError);
-                return false;
-            }
-
-            // Step 3: Test database connection
-            const { error: dbError } = await supabase
-                .from('gallery_images')
-                .select('id')
-                .limit(1);
-
-            if (dbError) {
-                console.error('Database connection failed:', dbError);
-                return false;
-            }
-
-            // Step 4: Test storage connection
-            const { error: storageError } = await supabase.storage
-                .from('images')
-                .list('', { limit: 1 });
-
-            if (storageError) {
-                console.error('Storage connection failed:', storageError);
-                return false;
-            }
-
-            console.log('All connection verifications passed');
-            return true;
-        } catch (error) {
-            console.error('Connection verification failed:', error);
-            return false;
         }
     };
 

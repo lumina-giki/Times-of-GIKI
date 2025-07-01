@@ -76,7 +76,7 @@ function ArticleEditor({ userProfile }: ArticleEditorProps) {
 
     useEffect(() => {
         fetchArticles();
-    }, [fetchArticles]); const handleSubmit = async (e: React.FormEvent) => {
+    }, [fetchArticles, userProfile]); const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Prevent double submission
@@ -333,8 +333,8 @@ function ArticleEditor({ userProfile }: ArticleEditorProps) {
             if (error instanceof Error) {
                 errorMessage = error.message;
             } else if (typeof error === 'object' && error !== null) {
-                const errorObj = error as any;
-                errorMessage = errorObj.message || errorObj.error_description || 'Unknown error occurred';
+                const errorObj = error as Record<string, unknown>;
+                errorMessage = (errorObj.message as string) || (errorObj.error_description as string) || 'Unknown error occurred';
             }
 
             alert(`Upload Error: ${errorMessage}`);
@@ -575,7 +575,7 @@ function ArticleEditor({ userProfile }: ArticleEditorProps) {
                                         <p>• Use *italic text* for style</p>
                                         <p>• Use # for headings (H1), ## for subheadings (H2), ### for H3</p>
                                         <p>• Upload images directly or insert URLs - images are automatically centered when displayed</p>
-                                        <p>• Use "Upload" button for new images or "URL" button for existing images</p>
+                                        <p>• Use &quot;Upload&quot; button for new images or &quot;URL&quot; button for existing images</p>
                                     </div>
                                 </div>
 
