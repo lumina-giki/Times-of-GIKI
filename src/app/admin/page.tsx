@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
+import { secureLog } from '../utils/secureLogger';
 
 // Direct imports instead of lazy loading to prevent unmounting issues
 import ArticleEditor from '../components/admin/ArticleEditor';
@@ -25,18 +26,18 @@ export default function AdminPage(): React.JSX.Element {
     const stableUserProfile = useMemo(() => userProfile, [userProfile?.id]);
 
     useEffect(() => {
-        console.log('🔄 AdminPage: Checking auth...');
+        secureLog.debug('AdminPage: Checking authentication');
         const checkAuth = async () => {
             try {
                 const { data: { user }, error: authError } = await supabase.auth.getUser();
 
                 if (authError || !user) {
-                    console.log('❌ AdminPage: No valid user found');
+                    secureLog.debug('AdminPage: No valid user found');
                     setError('Please log in to access the admin panel');
                     return;
                 }
 
-                console.log('✅ AdminPage: User authenticated:', user.email);
+                secureLog.debug('AdminPage: User authenticated');
                 // Create a basic user profile with fallbacks
                 const newProfile = {
                     id: user.id,
@@ -44,13 +45,13 @@ export default function AdminPage(): React.JSX.Element {
                     full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
                     role: 'admin' as const
                 };
-                console.log('🔧 AdminPage: Setting new user profile:', newProfile);
+                secureLog.debug('AdminPage: Setting user profile');
                 setUserProfile(newProfile);
             } catch (err) {
-                console.error('❌ AdminPage: Auth error:', err);
+                secureLog.error('AdminPage: Authentication failed', err);
                 setError('Authentication failed');
             } finally {
-                console.log('🏁 AdminPage: Auth check complete');
+                secureLog.debug('AdminPage: Auth check complete');
                 setLoading(false);
             }
         };
@@ -59,18 +60,18 @@ export default function AdminPage(): React.JSX.Element {
     }, []);
 
     useEffect(() => {
-        console.log('🔄 AdminPage: userProfile changed:', userProfile);
+        // console.log('🔄 AdminPage: userProfile changed:', userProfile);
     }, [userProfile]);
 
     // Add auth state listener to track what's happening
     useEffect(() => {
-        console.log('🔧 AdminPage: Setting up auth state listener...');
+        secureLog.debug('AdminPage: Setting up auth state listener');
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            console.log('🔄 AdminPage: Auth state changed:', event, session ? 'Session exists' : 'No session');
+            secureLog.debug('AdminPage: Auth state changed', { event, hasSession: !!session });
 
             // Only react to actual sign out
             if (event === 'SIGNED_OUT') {
-                console.log('⚠️ AdminPage: User signed out, clearing profile');
+                secureLog.debug('AdminPage: User signed out, clearing profile');
                 setUserProfile(null);
                 setError('Please log in to access the admin panel');
             }
@@ -78,7 +79,7 @@ export default function AdminPage(): React.JSX.Element {
         });
 
         return () => {
-            console.log('🧹 AdminPage: Cleaning up auth state listener');
+            secureLog.debug('AdminPage: Cleaning up auth state listener');
             subscription.unsubscribe();
         };
     }, []);
@@ -137,7 +138,7 @@ export default function AdminPage(): React.JSX.Element {
                         </button>
                         <button
                             onClick={() => {
-                                console.log('🔄 Switching to Images tab');
+                                secureLog.debug('AdminPage: Switching to Images tab');
                                 setActiveTab('images');
                             }}
                             className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'images'
