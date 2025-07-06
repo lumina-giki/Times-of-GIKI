@@ -90,7 +90,7 @@ export default function AdminPage(): React.JSX.Element {
                 {/* Background Effects */}
                 <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
                 <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-                
+
                 <div className="relative text-center">
                     <div className="glass-card-modern rounded-3xl p-8 max-w-sm mx-auto">
                         <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -110,7 +110,7 @@ export default function AdminPage(): React.JSX.Element {
                 {/* Background Effects */}
                 <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
                 <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-                
+
                 <div className="relative text-center glass-card-modern rounded-3xl p-8 max-w-md mx-auto">
                     <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +130,7 @@ export default function AdminPage(): React.JSX.Element {
             {/* Background Effects */}
             <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
             <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
-            
+
             {/* Navigation Header */}
             <nav className="relative bg-black/30 backdrop-blur-xl border-b border-white/10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -150,6 +150,33 @@ export default function AdminPage(): React.JSX.Element {
                                     {userProfile.full_name.charAt(0).toUpperCase()}
                                 </span>
                             </div>
+                            <button
+                                onClick={async () => {
+                                    try {
+                                        secureLog.debug('AdminPage: Signing out user');
+                                        const { error } = await supabase.auth.signOut();
+                                        if (error) {
+                                            secureLog.error('AdminPage: Sign out error', error);
+                                            setError('Failed to sign out');
+                                        } else {
+                                            secureLog.debug('AdminPage: Sign out successful');
+                                            setUserProfile(null);
+                                            // Optionally refresh the page or redirect
+                                            window.location.reload();
+                                        }
+                                    } catch (err) {
+                                        secureLog.error('AdminPage: Sign out failed', err);
+                                        setError('Sign out failed');
+                                    }
+                                }}
+                                className="glass-card-modern px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-red-500/20 transition-all duration-200 flex items-center space-x-2 group"
+                                title="Sign Out"
+                            >
+                                <svg className="w-4 h-4 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                <span className="text-sm font-medium">Sign Out</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -168,11 +195,10 @@ export default function AdminPage(): React.JSX.Element {
                         <div className="glass-card-modern rounded-2xl p-2 inline-flex space-x-1">
                             <button
                                 onClick={() => setActiveTab('articles')}
-                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
-                                    activeTab === 'articles'
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'articles'
                                         ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
                                         : 'text-white/70 hover:text-white hover:bg-white/10'
-                                }`}
+                                    }`}
                             >
                                 📝 Articles
                             </button>
@@ -181,21 +207,19 @@ export default function AdminPage(): React.JSX.Element {
                                     secureLog.debug('AdminPage: Switching to Images tab');
                                     setActiveTab('images');
                                 }}
-                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
-                                    activeTab === 'images'
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'images'
                                         ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
                                         : 'text-white/70 hover:text-white hover:bg-white/10'
-                                }`}
+                                    }`}
                             >
                                 🖼️ Gallery
                             </button>
                             <button
                                 onClick={() => setActiveTab('auth')}
-                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
-                                    activeTab === 'auth'
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'auth'
                                         ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
                                         : 'text-white/70 hover:text-white hover:bg-white/10'
-                                }`}
+                                    }`}
                             >
                                 🔐 Account
                             </button>
@@ -229,7 +253,7 @@ export default function AdminPage(): React.JSX.Element {
                                         </div>
                                     </div>
                                     <div className="mt-6">
-                                        <UserAuth />
+                                        <UserAuth showSignOut={true} />
                                     </div>
                                 </div>
                             ) : (
