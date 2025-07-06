@@ -1,11 +1,37 @@
 "use client";
 
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { secureLog } from '../../utils/secureLogger';
 
 function UserAuth() {
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        // Listen for auth state changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            secureLog.debug('UserAuth: Auth state changed', { event, hasSession: !!session });
+            
+            if (event === 'SIGNED_IN') {
+                secureLog.debug('UserAuth: User signed in successfully');
+                setLoading(false);
+                // Refresh the page to update the admin panel
+                window.location.reload();
+            } else if (event === 'SIGNED_OUT') {
+                secureLog.debug('UserAuth: User signed out');
+                setLoading(false);
+            } else if (event === 'TOKEN_REFRESHED') {
+                secureLog.debug('UserAuth: Token refreshed');
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+
     const customTheme = {
         default: {
             colors: {
@@ -68,16 +94,24 @@ function UserAuth() {
         <div className="glass-card-modern rounded-3xl p-8 w-full max-w-md mx-auto">
             <div className="text-center mb-8">
                 <div className="flex items-center justify-center mb-4">
-                    <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center">
-                        <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2zM12 7a4 4 0 00-4 4h8a4 4 0 00-4-4z" />
                         </svg>
                     </div>
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">Admin Access</h2>
                 <p className="text-white/60">
-                    Sign in to access the Times Of GIKI admin panel                </p>
+                    Sign in to access the Times Of GIKI admin panel
+                </p>
             </div>
+
+            {loading && (
+                <div className="text-center mb-4">
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-400 border-t-transparent mx-auto"></div>
+                    <p className="text-white/60 text-sm mt-2">Signing you in...</p>
+                </div>
+            )}
 
             <Auth
                 supabaseClient={supabase}
@@ -86,7 +120,6 @@ function UserAuth() {
                     variables: customTheme
                 }}
                 providers={[]}
-                redirectTo={`${window?.location?.origin}/admin`}
                 onlyThirdPartyProviders={false}
                 magicLink={true}
                 showLinks={false}
@@ -96,7 +129,8 @@ function UserAuth() {
             <div className="mt-6 text-center">
                 <p className="text-white/40 text-sm">
                     Only authorized users can access this panel
-                </p>            </div>
+                </p>
+            </div>
         </div>
     );
 }

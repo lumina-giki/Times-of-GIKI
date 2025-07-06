@@ -86,10 +86,19 @@ export default function AdminPage(): React.JSX.Element {
 
     if (loading) {
         return (
-            <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
-                    <p className="text-white/60">Loading admin panel...</p>
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+                {/* Background Effects */}
+                <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+                <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+                
+                <div className="relative text-center">
+                    <div className="glass-card-modern rounded-3xl p-8 max-w-sm mx-auto">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-2">Loading Admin Panel</h3>
+                        <p className="text-white/60">Please wait while we set things up...</p>
+                    </div>
                 </div>
             </div>
         );
@@ -97,11 +106,19 @@ export default function AdminPage(): React.JSX.Element {
 
     if (error || !userProfile) {
         return (
-            <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                <div className="text-center glass-card-modern rounded-3xl p-8 max-w-md mx-auto">
-                    <div className="text-red-400 text-6xl mb-4">⚠️</div>
+            <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+                {/* Background Effects */}
+                <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+                <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+                
+                <div className="relative text-center glass-card-modern rounded-3xl p-8 max-w-md mx-auto">
+                    <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
                     <h2 className="text-2xl font-bold text-white mb-4">Access Required</h2>
-                    <p className="text-white/60 mb-6">{error || 'Please log in to access this page'}</p>
+                    <p className="text-white/60 mb-8">{error || 'Please log in to access this page'}</p>
                     <UserAuth />
                 </div>
             </div>
@@ -109,58 +126,84 @@ export default function AdminPage(): React.JSX.Element {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-            <nav className="bg-black/50 backdrop-blur-xl border-b border-white/10">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+            {/* Background Effects */}
+            <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+            <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent"></div>
+            
+            {/* Navigation Header */}
+            <nav className="relative bg-black/30 backdrop-blur-xl border-b border-white/10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
-                        <h1 className="text-white font-bold">Times of GIKI Admin</h1>
-                        <span className="text-white/60">
-                            Welcome, {userProfile.full_name}!
-                        </span>
+                        <div className="flex items-center space-x-4">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-sm">TG</span>
+                            </div>
+                            <h1 className="text-white font-bold text-xl">Times of GIKI Admin</h1>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-white/60 text-sm">
+                                Welcome, {userProfile.full_name}!
+                            </span>
+                            <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-xs font-bold">
+                                    {userProfile.full_name.charAt(0).toUpperCase()}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </nav>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="glass-card-modern rounded-3xl p-8">
-                    <h2 className="text-2xl font-bold text-white mb-4">Admin Panel</h2>
+                    {/* Header Section */}
+                    <div className="text-center mb-8">
+                        <h2 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h2>
+                        <p className="text-white/60">Manage your Times of GIKI content</p>
+                    </div>
 
                     {/* Tab Navigation */}
-                    <div className="flex space-x-4 mb-6">
-                        <button
-                            onClick={() => setActiveTab('articles')}
-                            className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'articles'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    <div className="flex justify-center mb-8">
+                        <div className="glass-card-modern rounded-2xl p-2 inline-flex space-x-1">
+                            <button
+                                onClick={() => setActiveTab('articles')}
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                                    activeTab === 'articles'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                        : 'text-white/70 hover:text-white hover:bg-white/10'
                                 }`}
-                        >
-                            Articles
-                        </button>
-                        <button
-                            onClick={() => {
-                                secureLog.debug('AdminPage: Switching to Images tab');
-                                setActiveTab('images');
-                            }}
-                            className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'images'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            >
+                                📝 Articles
+                            </button>
+                            <button
+                                onClick={() => {
+                                    secureLog.debug('AdminPage: Switching to Images tab');
+                                    setActiveTab('images');
+                                }}
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                                    activeTab === 'images'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                        : 'text-white/70 hover:text-white hover:bg-white/10'
                                 }`}
-                        >
-                            Images
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('auth')}
-                            className={`px-4 py-2 rounded-lg transition-colors ${activeTab === 'auth'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            >
+                                🖼️ Gallery
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('auth')}
+                                className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                                    activeTab === 'auth'
+                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                        : 'text-white/70 hover:text-white hover:bg-white/10'
                                 }`}
-                        >
-                            Authentication
-                        </button>
+                            >
+                                🔐 Account
+                            </button>
+                        </div>
                     </div>
 
                     {/* Tab Content - Always mounted components */}
-                    <div className="mt-4">
+                    <div className="mt-6">
                         <div className={activeTab === 'articles' ? 'block' : 'hidden'}>
                             <ArticleEditor userProfile={stableUserProfile} />
                         </div>
@@ -169,11 +212,25 @@ export default function AdminPage(): React.JSX.Element {
                         </div>
                         <div className={activeTab === 'auth' ? 'block' : 'hidden'}>
                             {userProfile ? (
-                                <div className="text-white/60">
-                                    <p>Authenticated as: {userProfile.email}</p>
-                                    <p>Role: {userProfile.role}</p>
-                                    <p>User ID: {userProfile.id}</p>
-                                    <UserAuth />
+                                <div className="glass-card-modern rounded-2xl p-6">
+                                    <h3 className="text-xl font-bold text-white mb-4">Account Information</h3>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                            <span className="text-white/60">Email:</span>
+                                            <span className="text-white">{userProfile.email}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                            <span className="text-white/60">Role:</span>
+                                            <span className="text-blue-400 font-medium">{userProfile.role}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center py-2 border-b border-white/10">
+                                            <span className="text-white/60">User ID:</span>
+                                            <span className="text-white/80 text-sm font-mono">{userProfile.id}</span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-6">
+                                        <UserAuth />
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="text-white/60 p-4">Loading authentication info...</div>

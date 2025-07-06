@@ -10,13 +10,13 @@ interface LogData {
 // Sanitize sensitive data from logs
 const sanitizeLogData = (data: LogData): LogData => {
     const sanitized = { ...data };
-    
+
     // Remove or mask sensitive fields
     const sensitiveFields = [
-        'password', 'token', 'secret', 'key', 'email', 'id', 
+        'password', 'token', 'secret', 'key', 'email', 'id',
         'session', 'auth', 'user_id', 'access_token', 'refresh_token'
     ];
-    
+
     for (const field of sensitiveFields) {
         if (field in sanitized) {
             if (typeof sanitized[field] === 'string') {
@@ -32,7 +32,7 @@ const sanitizeLogData = (data: LogData): LogData => {
             }
         }
     }
-    
+
     return sanitized;
 };
 
@@ -47,7 +47,7 @@ export const secureLog = {
             }
         }
     },
-    
+
     info: (message: string, data?: LogData) => {
         if (isDevelopment) {
             if (data) {
@@ -57,7 +57,7 @@ export const secureLog = {
             }
         }
     },
-    
+
     // Always log errors (but sanitized)
     error: (message: string, error?: unknown) => {
         if (error instanceof Error) {
@@ -70,7 +70,7 @@ export const secureLog = {
             console.error(`❌ ERROR: ${message}`);
         }
     },
-    
+
     // Always log warnings (but sanitized)
     warn: (message: string, data?: LogData) => {
         if (data) {

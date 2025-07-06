@@ -13,9 +13,16 @@ const hasValidCredentials =
     supabaseUrl.startsWith('https://') &&
     supabaseAnonKey.length > 20
 
-// Create Supabase client with proper error handling
+// Create Supabase client with proper error handling and auth configuration
 export const supabase = hasValidCredentials
-    ? createClient(supabaseUrl, supabaseAnonKey)
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true,
+            flowType: 'pkce'
+        }
+    })
     : createClient('https://placeholder.supabase.co', 'placeholder-anon-key-for-fallback')
 
 // Export flag to check if Supabase is configured
