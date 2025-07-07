@@ -21,9 +21,46 @@ export default function AdminPage(): React.JSX.Element {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [editingName, setEditingName] = useState(false);
+    const [newDisplayName, setNewDisplayName] = useState('');
 
     // Create a stable reference for userProfile to prevent unnecessary re-renders
     const stableUserProfile = useMemo(() => userProfile, [userProfile?.id]);
+
+    const updateDisplayName = async (newName: string) => {
+        if (!userProfile || !newName.trim()) return;
+        
+        try {
+            setLoading(true);
+            secureLog.debug('AdminPage: Updating display name');
+            
+            // Update the user metadata in Supabase
+            const { error } = await supabase.auth.updateUser({
+                data: { full_name: newName.trim() }
+            });
+
+            if (error) {
+                secureLog.error('AdminPage: Failed to update display name', error);
+                setError('Failed to update display name');
+                return;
+            }
+
+            // Update local state
+            setUserProfile({
+                ...userProfile,
+                full_name: newName.trim()
+            });
+
+            setEditingName(false);
+            setNewDisplayName('');
+            secureLog.debug('AdminPage: Display name updated successfully');
+        } catch (err) {
+            secureLog.error('AdminPage: Display name update failed', err);
+            setError('Failed to update display name');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         secureLog.debug('AdminPage: Checking authentication');
@@ -39,10 +76,22 @@ export default function AdminPage(): React.JSX.Element {
 
                 secureLog.debug('AdminPage: User authenticated');
                 // Create a basic user profile with fallbacks
+                let displayName = user.user_metadata?.full_name || user.user_metadata?.name;
+                
+                // Set proper name for known users
+                if (user.email === 'misbahu094@gmail.com') {
+                    displayName = 'Misbah Ullah';
+                }
+                
+                // Fallback to email prefix only if no name is available
+                if (!displayName) {
+                    displayName = user.email?.split('@')[0] || 'User';
+                }
+                
                 const newProfile = {
                     id: user.id,
                     email: user.email || '',
-                    full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+                    full_name: displayName,
                     role: 'admin' as const
                 };
                 secureLog.debug('AdminPage: Setting user profile');
@@ -196,8 +245,8 @@ export default function AdminPage(): React.JSX.Element {
                             <button
                                 onClick={() => setActiveTab('articles')}
                                 className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'articles'
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-                                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                    : 'text-white/70 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 📝 Articles
@@ -208,8 +257,8 @@ export default function AdminPage(): React.JSX.Element {
                                     setActiveTab('images');
                                 }}
                                 className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'images'
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-                                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                    : 'text-white/70 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 🖼️ Gallery
@@ -217,8 +266,8 @@ export default function AdminPage(): React.JSX.Element {
                             <button
                                 onClick={() => setActiveTab('auth')}
                                 className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${activeTab === 'auth'
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
-                                        : 'text-white/70 hover:text-white hover:bg-white/10'
+                                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                                    : 'text-white/70 hover:text-white hover:bg-white/10'
                                     }`}
                             >
                                 🔐 Account
@@ -242,6 +291,53 @@ export default function AdminPage(): React.JSX.Element {
                                         <div className="flex justify-between items-center py-2 border-b border-white/10">
                                             <span className="text-white/60">Email:</span>
                                             <span className="text-white">{userProfile.email}</span>
+                                        </div>
+                                        <div className="py-2 border-b border-white/10">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-white/60">Display Name:</span>
+                                                {editingName ? (
+                                                    <div className="flex items-center space-x-2">
+                                                        <input
+                                                            type="text"
+                                                            value={newDisplayName}
+                                                            onChange={(e) => setNewDisplayName(e.target.value)}
+                                                            className="px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm focus:border-blue-400 focus:outline-none"
+                                                            placeholder="Enter your name"
+                                                            autoFocus
+                                                        />
+                                                        <button
+                                                            onClick={() => updateDisplayName(newDisplayName)}
+                                                            disabled={!newDisplayName.trim()}
+                                                            className="text-green-400 hover:text-green-300 disabled:text-gray-500 transition-colors"
+                                                        >
+                                                            ✓
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                setEditingName(false);
+                                                                setNewDisplayName('');
+                                                            }}
+                                                            className="text-red-400 hover:text-red-300 transition-colors"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="text-white">{userProfile.full_name}</span>
+                                                        <button
+                                                            onClick={() => {
+                                                                setEditingName(true);
+                                                                setNewDisplayName(userProfile.full_name);
+                                                            }}
+                                                            className="text-blue-400 hover:text-blue-300 transition-colors"
+                                                            title="Edit display name"
+                                                        >
+                                                            ✏️
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="flex justify-between items-center py-2 border-b border-white/10">
                                             <span className="text-white/60">Role:</span>
